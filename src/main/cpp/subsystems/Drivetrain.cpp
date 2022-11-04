@@ -140,6 +140,7 @@ void Drivetrain::ConfigureMotor(WPI_TalonFX &motor, bool inverted) {
 
 void Drivetrain::ResetOdometry(frc::Pose2d pose, frc::Rotation2d angle) {
   ResetEncoders();
+  m_imu.Reset();
   m_odometry.ResetPosition(pose, angle);
 }
 

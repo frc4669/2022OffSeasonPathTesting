@@ -24,6 +24,8 @@ class RobotContainer {
  public:
   RobotContainer();
 
+  void DisabledInit();
+
   frc2::Command* GetAutonomousCommand();
 
  private:

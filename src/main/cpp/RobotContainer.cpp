@@ -22,10 +22,18 @@ RobotContainer::RobotContainer() : m_autonomousCommand(&m_subsystem) {
 
 void RobotContainer::ConfigureButtonBindings() {
   // Configure your button bindings here
+
+  i_f310.redButton.WhenPressed([this] { m_drivetrain.ResetOdometry(frc::Pose2d(), frc::Rotation2d()); }, { &m_drivetrain });
+}
+
+void RobotContainer::DisabledInit() {
+  m_drivetrain.ResetOdometry(frc::Pose2d(), frc::Rotation2d());
 }
 
 frc2::Command* RobotContainer::GetAutonomousCommand() {
-  m_drivetrain.ResetOdometry(m_drivetrain.GetAutoInitialPose(), m_drivetrain.GetAutoInitialRotation());
+  // m_drivetrain.ResetOdometry(m_drivetrain.GetAutoInitialPose(), m_drivetrain.GetAutoInitialRotation());
+
+  m_drivetrain.ResetOdometry(frc::Pose2d(), frc::Rotation2d());
 
   std::function<frc::Pose2d()> getPose = [this] () { return m_drivetrain.GetCurrentPose(); };
   std::function<frc::DifferentialDriveWheelSpeeds()> getWheelSpeeds = [this] () { return m_drivetrain.GetWheelSpeeds(); };
