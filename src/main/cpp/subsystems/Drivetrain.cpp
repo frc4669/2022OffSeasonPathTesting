@@ -27,6 +27,11 @@ Drivetrain::Drivetrain() {
 
 void Drivetrain::Periodic() {
     m_odometry.Update(GetRotation(), GetLeftDistanceMeters(), GetRightDistanceMeters());
+    frc::SmartDashboard::PutNumber("Left Distance (m)", GetLeftDistanceMeters().value());
+    frc::SmartDashboard::PutNumber("Right Distance (m)", GetRightDistanceMeters().value());
+
+    frc::SmartDashboard::PutNumber("X Position (m)", m_odometry.GetPose().X().value());
+    frc::SmartDashboard::PutNumber("Y Position (m)", m_odometry.GetPose().Y().value());
 
     m_field.SetRobotPose(m_odometry.GetPose());
 }
@@ -36,18 +41,18 @@ void Drivetrain::CurvatureDrive(double fwd, double rot, bool fromController) {
 }
 
 frc::Trajectory Drivetrain::GetAutoTrajectory() {
-  PathPlannerTrajectory autonomousPath = PathPlanner::loadPath(AUTO_TRAJECTORY, 4_mps, 4_mps_sq);
+  PathPlannerTrajectory autonomousPath = PathPlanner::loadPath(AUTO_TRAJECTORY, DriveConstants::kMaxAutoSpeed, DriveConstants::kMaxAutoAccel);
   frc::Trajectory trajectory = autonomousPath.asWPILibTrajectory();
   return trajectory;
 }
 
 frc::Pose2d Drivetrain::GetAutoInitialPose() {
-  PathPlannerTrajectory autonomousPath = PathPlanner::loadPath(AUTO_TRAJECTORY, 4_mps, 4_mps_sq);
+  PathPlannerTrajectory autonomousPath = PathPlanner::loadPath(AUTO_TRAJECTORY, DriveConstants::kMaxAutoSpeed, DriveConstants::kMaxAutoAccel);
   return autonomousPath.getInitialState()->pose;
 }
 
 frc::Rotation2d Drivetrain::GetAutoInitialRotation() {
-  PathPlannerTrajectory autonomousPath = PathPlanner::loadPath(AUTO_TRAJECTORY, 4_mps, 4_mps_sq);
+  PathPlannerTrajectory autonomousPath = PathPlanner::loadPath(AUTO_TRAJECTORY, DriveConstants::kMaxAutoSpeed, DriveConstants::kMaxAutoAccel);
   return autonomousPath.getInitialState()->pose.Rotation();
 }
 

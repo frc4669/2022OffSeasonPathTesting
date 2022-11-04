@@ -16,7 +16,7 @@
 
 #include <units/units.h>
 
-#define AUTO_TRAJECTORY "TestPath2"
+#define AUTO_TRAJECTORY "TestPath3"
 
 namespace DriveConstants {
     constexpr int kLeftMain = 50;
@@ -46,4 +46,7 @@ namespace DriveConstants {
 
     constexpr double kInchesPerTicksLowGear = kWheelCirc / (kTicksPerRev * kFirstGearRatio * kSecondGearRatio * kLowGearRatio * kLastGearRatio);
     constexpr double kTicksPerInchesLowGear = (kTicksPerRev * kFirstGearRatio * kSecondGearRatio * kLowGearRatio * kLastGearRatio) / kWheelCirc;
+
+    constexpr auto kMaxAutoAccel = 1_mps_sq;
+    constexpr auto kMaxAutoSpeed = 1_mps;
 }
