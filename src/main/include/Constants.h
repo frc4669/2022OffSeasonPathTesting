@@ -26,13 +26,15 @@ namespace DriveConstants {
 
     constexpr auto kTrackWidth = 18_in;
 
-    constexpr auto ks = 0.62518_V;
-    constexpr auto kv = 0.092241_V * 1_s / 1_m;
-    constexpr auto ka = 0.006398_V * 1_s * 1_s / 1_m;
+    constexpr auto ks = 0.63936_V;
+    constexpr auto kv = 1.8032_V * 1_s / 1_m;
+    constexpr auto ka = 0.11319_V * 1_s * 1_s / 1_m;
 
-    constexpr double kp = 1.8051;
+    constexpr double kp = 39.174;
     constexpr double ki = 0;
-    constexpr double kd = 0.10332;
+    constexpr double kd = 2.8251;
+
+    // use sysid "velocity" values for this, please, not "position", 39.174 is obviously overkill
 
     constexpr double kWheelDiameter = 6;
     constexpr double kWheelCirc = kWheelDiameter * units::constants::pi;

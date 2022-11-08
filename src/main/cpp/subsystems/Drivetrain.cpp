@@ -26,16 +26,18 @@ Drivetrain::Drivetrain() {
 }
 
 void Drivetrain::Periodic() {
-    m_odometry.Update(GetRotation(), GetLeftDistanceMeters() * 50, GetRightDistanceMeters() * 50); // change multiplier (very inaccurate)
+    m_odometry.Update(GetRotation(), -GetLeftDistanceMeters(), GetRightDistanceMeters()); // change multiplier (very inaccurate)
 
-    frc::SmartDashboard::PutNumber("Left Distance (m)", GetLeftDistanceMeters().value());
-    frc::SmartDashboard::PutNumber("Right Distance (m)", -GetRightDistanceMeters().value());
+    frc::SmartDashboard::PutNumber("Left Distance (m)", -GetLeftDistanceMeters().value());
+    frc::SmartDashboard::PutNumber("Right Distance (m)", GetRightDistanceMeters().value());
 
     frc::SmartDashboard::PutNumber("X Position (m)", m_odometry.GetPose().X().value());
     frc::SmartDashboard::PutNumber("Y Position (m)", m_odometry.GetPose().Y().value());
 
     frc::SmartDashboard::PutNumber("Left Velocity (m/s)", GetLeftVelMetersPerSecond().value());
     frc::SmartDashboard::PutNumber("Right Velocity (m/s)", -GetRightVelMetersPerSecond().value());
+
+    frc::SmartDashboard::PutNumber("Rotation (deg)", -GetRotation().Degrees().value());
 
     m_field.SetRobotPose(m_odometry.GetPose());
 }
