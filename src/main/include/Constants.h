@@ -16,7 +16,7 @@
 
 #include <units/units.h>
 
-#define AUTO_TRAJECTORY "TestPath3"
+#define AUTO_TRAJECTORY "FigureEight"
 
 namespace DriveConstants {
     constexpr int kLeftMain = 50;

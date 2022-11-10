@@ -31,6 +31,8 @@ class Drivetrain : public frc2::SubsystemBase {
   void ResetRightEncoder();
   void ResetEncoders();
 
+  frc::Field2d& GetField();
+
   frc::Trajectory GetAutoTrajectory();
 
   void ResetOdometry(frc::Pose2d pose, frc::Rotation2d angle);

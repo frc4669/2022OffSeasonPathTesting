@@ -32,20 +32,16 @@ void RobotContainer::DisabledInit() {
   m_drivetrain.ResetOdometry(frc::Pose2d(), frc::Rotation2d());
 }
 
-void RobotContainer::AutonomousPeriodic() {
-  m_drivetrain.Periodic();
-}
-
 frc2::Command* RobotContainer::GetAutonomousCommand() {
-  // m_drivetrain.ResetOdometry(m_drivetrain.GetAutoInitialPose(), m_drivetrain.GetAutoInitialRotation());
-
-  m_drivetrain.ResetOdometry(frc::Pose2d(), frc::Rotation2d());
+  m_drivetrain.ResetOdometry(m_drivetrain.GetAutoInitialPose(), m_drivetrain.GetAutoInitialRotation());
 
   std::function<frc::Pose2d()> getPose = [this] () { return m_drivetrain.GetCurrentPose(); };
   std::function<frc::DifferentialDriveWheelSpeeds()> getWheelSpeeds = [this] () { return m_drivetrain.GetWheelSpeeds(); };
   std::function<void(units::volt_t, units::volt_t)> setVoltages = [this] (auto left, auto right) {
     m_drivetrain.SetVoltages(left, right);
   };
+
+  m_drivetrain.GetField().GetObject("traj")->SetTrajectory(m_drivetrain.GetAutoTrajectory());
 
   frc2::RamseteCommand followPathplannerFile {
     m_drivetrain.GetAutoTrajectory(), //Gets the trajectory from pathplannnerlib
@@ -61,10 +57,7 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
   };
   
   return new frc2::SequentialCommandGroup(
-    // frc2::ParallelCommandGroup(
-      std::move(followPathplannerFile),
-    //   frc2::RunCommand([this] { m_drivetrain.Periodic(); })
-    // ),
-    frc2::InstantCommand([this, setVoltages] { m_drivetrain.SetVoltages(0_V, 0_V); })
+    std::move(followPathplannerFile),
+    frc2::InstantCommand([this] { m_drivetrain.SetVoltages(0_V, 0_V); })
   );
 }
