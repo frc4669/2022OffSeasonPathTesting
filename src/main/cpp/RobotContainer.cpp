@@ -5,7 +5,9 @@
 #include "RobotContainer.h"
 
 #include <frc2/command/SequentialCommandGroup.h>
+#include <frc2/command/ParallelCommandGroup.h>
 #include <frc2/command/RunCommand.h>
+#include <frc2/command/InstantCommand.h>
 
 RobotContainer::RobotContainer() : m_autonomousCommand(&m_subsystem) {
   // Initialize all of your commands and subsystems here
@@ -30,6 +32,10 @@ void RobotContainer::DisabledInit() {
   m_drivetrain.ResetOdometry(frc::Pose2d(), frc::Rotation2d());
 }
 
+void RobotContainer::AutonomousPeriodic() {
+  m_drivetrain.Periodic();
+}
+
 frc2::Command* RobotContainer::GetAutonomousCommand() {
   // m_drivetrain.ResetOdometry(m_drivetrain.GetAutoInitialPose(), m_drivetrain.GetAutoInitialRotation());
 
@@ -38,8 +44,7 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
   std::function<frc::Pose2d()> getPose = [this] () { return m_drivetrain.GetCurrentPose(); };
   std::function<frc::DifferentialDriveWheelSpeeds()> getWheelSpeeds = [this] () { return m_drivetrain.GetWheelSpeeds(); };
   std::function<void(units::volt_t, units::volt_t)> setVoltages = [this] (auto left, auto right) {
-    m_drivetrain.SetLeftVoltage(left);
-    m_drivetrain.SetRightVoltage(right);
+    m_drivetrain.SetVoltages(left, right);
   };
 
   frc2::RamseteCommand followPathplannerFile {
@@ -56,6 +61,10 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
   };
   
   return new frc2::SequentialCommandGroup(
-    std::move(followPathplannerFile)
+    // frc2::ParallelCommandGroup(
+      std::move(followPathplannerFile),
+    //   frc2::RunCommand([this] { m_drivetrain.Periodic(); })
+    // ),
+    frc2::InstantCommand([this, setVoltages] { m_drivetrain.SetVoltages(0_V, 0_V); })
   );
 }

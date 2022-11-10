@@ -35,6 +35,8 @@ class Drivetrain : public frc2::SubsystemBase {
 
   void ResetOdometry(frc::Pose2d pose, frc::Rotation2d angle);
 
+  void SetVoltages(units::volt_t left, units::volt_t right);
+
   frc::Rotation2d GetRotation();
 
   frc::Rotation2d GetAutoInitialRotation();

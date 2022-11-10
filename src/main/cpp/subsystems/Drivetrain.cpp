@@ -26,6 +26,8 @@ Drivetrain::Drivetrain() {
 }
 
 void Drivetrain::Periodic() {
+    wpi::outs() << "Drivetrain::Periodic is running";
+
     m_odometry.Update(GetRotation(), -GetLeftDistanceMeters(), GetRightDistanceMeters()); // change multiplier (very inaccurate)
 
     frc::SmartDashboard::PutNumber("Left Distance (m)", -GetLeftDistanceMeters().value());
@@ -98,6 +100,7 @@ units::degree_t Drivetrain::GetHeading() {
 }
 
 frc::Rotation2d Drivetrain::GetRotation() {
+  wpi::outs() << " Getting rotation... ";
   return frc::Rotation2d(m_imu.GetAngle());
 }
 
@@ -150,20 +153,35 @@ void Drivetrain::ResetOdometry(frc::Pose2d pose, frc::Rotation2d angle) {
   m_odometry.ResetPosition(pose, angle);
 }
 
+void Drivetrain::SetVoltages(units::volt_t left, units::volt_t right) {
+  wpi::outs() << "Setting voltages... ";
+  SetLeftVoltage(left);
+  SetRightVoltage(right);
+  wpi::outs() << "Voltages set!\n";
+}
+
 units::meter_t Drivetrain::GetLeftDistanceMeters() {
-  return units::meter_t(
+  units::meter_t leftDistanceMeters = units::meter_t(
     units::inch_t(
       m_leftMain.GetSensorCollection().GetIntegratedSensorPosition() * DriveConstants::kInchesPerTicksLowGear
     )
   );
+
+  wpi::outs() << " Getting left distance in meters... ";
+
+  return leftDistanceMeters;
 }
 
 units::meter_t Drivetrain::GetRightDistanceMeters() {
-  return units::meter_t(
+  units::meter_t rightDistanceMeters = units::meter_t(
     units::inch_t(
       m_rightMain.GetSensorCollection().GetIntegratedSensorPosition() * DriveConstants::kInchesPerTicksLowGear
     )
   );
+
+  wpi::outs() << " Getting right distance in meters... ";
+
+  return rightDistanceMeters;
 }
 
 units::meters_per_second_t Drivetrain::GetLeftVelMetersPerSecond() {
@@ -185,10 +203,11 @@ units::meters_per_second_t Drivetrain::GetRightVelMetersPerSecond() {
 }
 
 frc::DifferentialDriveWheelSpeeds Drivetrain::GetWheelSpeeds() {
-  return {
-    GetLeftVelMetersPerSecond(),
-    -GetRightVelMetersPerSecond()
-  };
+  auto leftVel = GetLeftVelMetersPerSecond();
+  auto rightVel = -GetRightVelMetersPerSecond();
+  wpi::outs() << "Getting wheel speeds... ";
+
+  return { leftVel, rightVel };
 }
 
 frc::Pose2d Drivetrain::GetCurrentPose() {

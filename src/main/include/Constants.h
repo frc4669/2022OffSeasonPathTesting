@@ -30,11 +30,9 @@ namespace DriveConstants {
     constexpr auto kv = 1.8032_V * 1_s / 1_m;
     constexpr auto ka = 0.11319_V * 1_s * 1_s / 1_m;
 
-    constexpr double kp = 39.174;
+    constexpr double kp = 1.916;
     constexpr double ki = 0;
-    constexpr double kd = 2.8251;
-
-    // use sysid "velocity" values for this, please, not "position", 39.174 is obviously overkill
+    constexpr double kd = 0;
 
     constexpr double kWheelDiameter = 6;
     constexpr double kWheelCirc = kWheelDiameter * units::constants::pi;
@@ -49,6 +47,6 @@ namespace DriveConstants {
     constexpr double kInchesPerTicksLowGear = kWheelCirc / (kTicksPerRev * kFirstGearRatio * kSecondGearRatio * kLowGearRatio * kLastGearRatio);
     constexpr double kTicksPerInchesLowGear = (kTicksPerRev * kFirstGearRatio * kSecondGearRatio * kLowGearRatio * kLastGearRatio) / kWheelCirc;
 
-    constexpr auto kMaxAutoAccel = 1_mps_sq;
-    constexpr auto kMaxAutoSpeed = 1_mps;
+    constexpr auto kMaxAutoAccel = 0.5_mps_sq;
+    constexpr auto kMaxAutoSpeed = 0.5_mps;
 }
